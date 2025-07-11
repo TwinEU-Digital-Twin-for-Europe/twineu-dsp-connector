@@ -1,16 +1,17 @@
 # OneNet DSP Connector (v2)
 
 ## Introduction
-<img src="images/TRUE_Connector_Logo.png" alt="True Connector" width="25%" height="25%">
-<img src="images/idsa-sign-component-certification-small.png" alt="IDS certified" width="5%" height="5%">
+[<img src="images/TRUE_Connector_Logo.png" alt="True Connector" width="25%">](https://github.com/Engineering-Research-and-Development/dsp-true-connector)&nbsp;&nbsp;&nbsp;&nbsp;
+[<img src="images/idsa-sign-component-certification-small.png" alt="IDS certified" width="5%">](https://internationaldataspaces.org/offers/certification/)
 
 This project started from and extends the [Engineering DSP True Connector](https://github.com/Engineering-Research-and-Development/dsp-true-connector), a general purpose Data Space Connector and open-source project developed by ENG, supporting IDSA Data Space Protocol standard (current version 2024-1). The connector is an open-source solution, designed to enable self-determined data sharing while ensuring compliance with regulations such as GDPR. Initially focused on the manufacturing domain, the TRUE Connector has proven its versatility across diverse sectors including circular economy, energy, smart buildings, and agri-food domains. It has received IDS certification.
 
 <br />
 
-<img src="images/OneNet.svg" alt="OneNet Project" width="15%" height="15%">
+[<img src="images/OneNet.svg" alt="OneNet Project" width="15%">](https://github.com/european-dynamics-rnd/OneNet)&nbsp;&nbsp;&nbsp;&nbsp;
+[<img src="images/Interstore-logo.svg" alt="Interstore Project" width="15%">](https://github.com/Horizont-Europe-Interstore/Data-Space-Connector)
 
-Furthermore, the project builds upon the work carried out with the [OneNet connector](https://github.com/european-dynamics-rnd/OneNet), developed within the [OneNet project](https://www.onenet-project.eu/) and extended in [Interstore Project](https://interstore-project.eu/). Specifically, the following elements were adopted and extended from the OneNet connector: 
+Furthermore, the project builds upon the work carried out with the [OneNet connector](https://github.com/european-dynamics-rnd/OneNet), developed within the [OneNet project](https://www.onenet-project.eu/) and extended in [Interstore Project](https://github.com/Horizont-Europe-Interstore/Data-Space-Connector). Specifically, the following elements were adopted and extended from the OneNet connector: 
 
 * the OneNet Middleware for centralized services such as Identity Management and Service Catalogue (extended)
 * the Semantic Vocabulary with more than 60 standardized services for the energy domain

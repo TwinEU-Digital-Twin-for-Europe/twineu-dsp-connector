@@ -1,0 +1,28 @@
+{
+    "users": [
+        {
+            "_class": "it.eng.connector.model.User",
+            "_id": "59d54e6d-a3f3-4a03-a093-d276e3068eef",
+            "firstName": "Admin",
+            "lastName": "Role",
+            "email": "admin@mail.com",
+            "password": "$2a$10$wQgl7stAxkVI1oxaynYU2uj.1IxzQ/ETygs32RoveH.rkgAfXAk5q",
+            "enabled": true,
+            "expired": false,
+            "locked": false,
+            "role": "ROLE_ADMIN"
+        },
+        {
+            "_class": "it.eng.connector.model.User",
+            "_id": "cab7b27b-f810-457d-b900-368994f6a640",
+            "firstName": "Connector",
+            "lastName": "Role",
+            "email": "connector@mail.com",
+            "password": "$2a$10$wQgl7stAxkVI1oxaynYU2uj.1IxzQ/ETygs32RoveH.rkgAfXAk5q",
+            "enabled": "true",
+            "expired": false,
+            "locked": false,
+            "role": "ROLE_CONNECTOR"
+        }
+    ]
+}

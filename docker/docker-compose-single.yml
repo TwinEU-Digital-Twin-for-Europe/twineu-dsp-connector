@@ -1,0 +1,118 @@
+services:
+### minio (simulated S3 cloud storage)
+  minio:
+    image: minio/minio
+    networks:
+      - network-a
+    container_name: minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    command: server /data --console-address ":9001"
+
+### intstance a
+  onenet-dsp-api-a:
+    restart: unless-stopped
+    image: mlafranca/onenet-dsp-api:1.0
+    container_name: onenet-dsp-api-a
+    ports:
+      - "30001:30001"
+    depends_on:
+      - connector-a
+    networks:
+      - network-a
+    volumes:
+      - ./onenet_dsp_api_a_resources:/config
+    environment:
+      - CONNECTOR_URL=${CONNECTOR_A_ENDPOINT_API_URL}
+      - CONNECTOR_BASIC_AUTHENTICATION=${CONNECTOR_BASIC_AUTHENTICATION}
+      - CENTRALIZED_SERVICES_API_URL=${CENTRALIZED_SERVICES_API_URL}
+  connector-a:
+    restart: unless-stopped
+    image: ghcr.io/engineering-research-and-development/dsp-true-connector:0.4.0
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 1024M
+    logging:
+      options:
+        max-size: "200M"
+    networks:
+      - network-a
+    container_name: connector-a
+    ports:
+      - 0.0.0.0:8888:2222 #FTP
+      - 8080:8080
+    depends_on:
+      - mongodb-a
+      - minio
+    environment:
+      - "JDK_JAVA_OPTIONS=-Xmx1024m"
+      - CALLBACK_ADDRESS=${CONNECTOR_A_ENDPOINT_API_URL}
+      - KEYSTORE_NAME=${CONNECTOR_A_KEYSTORE_NAME}
+      - KEY_PASSWORD=${CONNECTOR_A_KEY_PASSWORD}
+      - KEYSTORE_PASSWORD=${CONNECTOR_A_KEYSTORE_PASSWORD}
+      - KEYSTORE_ALIAS=${CONNECTOR_A_KEYSTORE_ALIAS}
+      - DAPS_KEYSTORE_NAME=${DAPS_KEYSTORE_NAME}
+      - DAPS_KEYSTORE_PASSWORD=${DAPS_KEYSTORE_PASSWORD}
+      - DAPS_KEYSTORE_ALIAS=${KEYSTORE_ALIAS}
+      - TRUSTSTORE_NAME=${TRUSTSTORE_NAME}
+      - TRUSTSTORE_PASSWORD=${TRUSTSTORE_PASSWORD}
+    volumes:
+      - ./connector_a_resources:/config
+      - ./tc_cert:/cert
+      - ./:/home/nobody/ftp
+      - tc_a_log:/var/log/tc
+      
+  mongodb-a:
+    restart: unless-stopped
+    container_name: mongodb-a
+    image: mongo:7.0.12
+    networks:
+      - network-a
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb-data_a:/data/db
+      - mongodb-configdb_a:/data/configdb
+  
+
+  dsp-connector-ui:
+    image: gdimarco/data-space-connector-ui:latest
+    container_name: dsp-connector-ui
+    volumes:
+      - ./connector-ui/nginx-conf/ui-nginx.conf:/etc/nginx/templates/ui-nginx.conf.template
+      - ./connector-ui/theme/twineu:/usr/share/nginx/html/img/theme
+    environment:
+      - APP_PUSH_ENABLED=${PUSH_ENABLED}
+      - APP_API_URL=/api
+      - CENTRAL_API_URL=${CENTRALIZED_SERVICES_API_URL}
+    ports:
+      - "8081:8080"
+    restart: always
+
+  dozzle:
+    image: amir20/dozzle:latest
+    container_name: dozzle
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "8085:8080"
+    networks:
+      - network-a
+      
+networks:
+  network-a: { }
+  
+volumes:
+  minio_data: { }
+  tc_a_log: { }
+  mongodb-data_a: { }
+  mongodb-configdb_a: { }

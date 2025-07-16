@@ -139,11 +139,11 @@ http://localhost:8081/
 
 2.	Navigate to the connector settings by the sidebar menu & define the urls of your Onenet DSP Api Url and Connector Url. Those 2 connector applications are running on the containers that you installed, so the urls must be configured accordingly as shown below.
 
-#### Local Api Url
+#### OneNet DSP Api Url
 The url must be http://your_ip_where_the_containers_are_installed:30001/api
 In the default testing configuration two local-api are exposed to the URLs http://localhost:30001/api or  http://localhost:30002/api, one for connector a and one for connector b.
 
-#### Data App Url
+#### Connector Url
 In the default testing configuration the connectors are exposed to the URLs http://connector-a:8080 or  http://connector-b:8080.
 
 

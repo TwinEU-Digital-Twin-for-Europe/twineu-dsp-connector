@@ -1,4 +1,4 @@
-# OneNet DSP Connector (v2)
+# TwinEU DSP Connector (v2)
 
 ## Introduction
 [<img src="images/TRUE_Connector_Logo.png" alt="True Connector" width="25%">](https://github.com/Engineering-Research-and-Development/dsp-true-connector)&nbsp;&nbsp;&nbsp;&nbsp;
@@ -20,7 +20,7 @@ Furthermore, the project builds upon the work carried out with the [OneNet conne
 
 ## New Features 
 
-Starting from version 2, the OneNet DSP Connector includes support for the IDSA Data Space Protocol (current version: 2024-1).
+Starting from version 2, the TwinEU DSP Connector includes support for the IDSA Data Space Protocol (current version: 2024-1).
 
 ## Prerequisites
 The deployment process involves the use of Docker containers. The use of Docker guarantees not only an easy deployment process and total portability of the solution, but also a high level of scalability of the released applications.
@@ -33,22 +33,22 @@ The software prerequisites include:
 *	Linux or Windows (preferably Server edition) Operative System (OS);
 *	docker and docker-compose;
 
-OneNet Connector software and its components are available via the Docker containers. Firstly, the Docker platform has to be downloaded and installed accordingly to the OS of the server to host the deployment.
+TwinEU Connector software and its components are available via the Docker containers. Firstly, the Docker platform has to be downloaded and installed accordingly to the OS of the server to host the deployment.
 For the correct installation of docker and docker-compose, please refer to the official guides: https://docs.docker.com/get-docker/
 
-## OneNet DSP Connector v2 installation on Docker
-To proceed with the installation of OneNet Connector, the user must use the docker folder of the github repository that contains all the necessary configuration.
+## TwinEU DSP Connector v2 installation on Docker
+To proceed with the installation of TwinEU Connector, the user must use the docker folder of the github repository that contains all the necessary configuration.
 
-1.	The first step is to clone this repository https://github.com/TwinEU-Digital-Twin-for-Europe/data-space-connector in a specific folder (e.g. *onenet-framework*), by typing:
+1.	The first step is to clone this repository https://github.com/TwinEU-Digital-Twin-for-Europe/data-space-connector in a specific folder (e.g. *twineu-framework*), by typing:
 ```
-mkdir onenet-framework
-cd onenet-framework
+mkdir twineu-framework
+cd twineu-framework
 git clone https://github.com/TwinEU-Digital-Twin-for-Europe/onenet-dsp-connector.git
 ```
 
-2.	There is the *docker-compose.yml* file located under the docker folder that contains all the configuration of the OneNet DSP Connector containers. Go to that folder by typing the command:
+2.	There is the *docker-compose.yml* file located under the docker folder that contains all the configuration of the TwinEU DSP Connector containers. Go to that folder by typing the command:
 ```
-cd onenet-dsp-connector/docker
+cd twineu-dsp-connector/docker
 ```
 
 3.	Start the containers with the below command:
@@ -67,7 +67,7 @@ Alternatively you can use dozzle UI to access the logs of each container. Open t
 http://localhost:8085
 ```
 
-5.	If no errors are seen, this means that OneNet DSP Connector was successfully deployed on your premisses.
+5.	If no errors are seen, this means that TwinEU DSP Connector was successfully deployed on your premisses.
 
 To stop all the containers use:
 ```
@@ -130,7 +130,7 @@ In particular, for each service to be exposed, a location type directive must be
 For further information, refer to the [Official Nginx Guide](https://nginx.org/en/docs/).
 
 ### Login & Connector Settings
-A Graphical User Interface is available together with OneNet Connector. It can be accessed through the url:
+A Graphical User Interface is available together with TwinEU Connector. It can be accessed through the url:
 ```
 http://localhost:8081/
 ```
@@ -139,18 +139,31 @@ http://localhost:8081/
 
 2.	Navigate to the connector settings by the sidebar menu & define the urls of your Onenet DSP Api Url and Connector Url. Those 2 connector applications are running on the containers that you installed, so the urls must be configured accordingly as shown below.
 
-#### OneNet DSP Api Url
+#### TwinEU DSP Api Url
 The url must be http://your_ip_where_the_containers_are_installed:30001/api
 In the default testing configuration two local-api are exposed to the URLs http://localhost:30001/api or  http://localhost:30002/api, one for connector a and one for connector b.
 
 #### Connector Url
 In the default testing configuration the connectors are exposed to the URLs http://connector-a:8080 or  http://connector-b:8080.
 
+### Using the connector
+In the standard test environment with two connectors, you should have two users, each configured with a different connector. For example:
+
+user1 (provider):
+- Local API URL: http://&lt;*server-ip-or-dns*&gt;:30001/api
+- Endpoint connector URL: http://connector-a:8080
+
+user2 (consumer):
+- Local API URL: http://&lt;*server-ip-or-dns*&gt;:30002/api
+- Endpoint connector URL: http://connector-b:8080
+
+You can use *user1* as the provider and *user2* as the consumer or viceversa.
+
 
 
 ### Environment Configuration
 
-Inside the */docker* project folder, there is an *.env* environment configuration file. This file allows you to set all Back End configurations of the Onenet DSP Connector. 
+Inside the */docker* project folder, there is an *.env* environment configuration file. This file allows you to set all Back End configurations of the TwinEU DSP Connector. 
 
 #### Push Mechanism Flow
 The Push mechanism flow is enabled by default. To disable the function use the env variable below.

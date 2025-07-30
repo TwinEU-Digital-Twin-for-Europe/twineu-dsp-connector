@@ -1,28 +1,26 @@
 {
     "_class": "it.eng.catalog.model.Catalog",
     "keyword": [
-        "Employee",
-        "Information",
-        "Test",
-        "TRUEConnector team information",
-        "ConnectorA"
+        "Default",
+        "DSP TRUE Connector",
+        "Connector"
     ],
     "theme": [
         "dark theme",
         "light theme"
     ],
     "conformsTo": "conformsToSomething",
-    "creator": "Engineering Informatica S.p.A.",
+    "creator": "Engineering Ingegneria Informatica S.p.A.",
     "description": [
         {
-            "value": "Sample connector catalog offering TRUEConnector team information",
+            "value": "DSP TRUE Connector Catalog",
             "language": "en"
         }
     ],
-    "identifier": "Unique identifier for test Connector Catalog",
+    "identifier": "Unique identifier for DSP TRUE Connector Catalog",
     "issued": "2024-04-23T16:26:00.000Z",
     "modified": "2024-04-23T16:26:00.000Z",
-    "title": "Testcatalog - TRUEConnector team information",
+    "title": "DSP TRUE Connector Catalog",
     "distribution": [],
     "dataset": [],
     "service": [],

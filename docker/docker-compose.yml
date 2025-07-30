@@ -19,7 +19,7 @@ services:
 ### intstance a
   onenet-dsp-api-a:
     restart: unless-stopped
-    image: mlafranca/onenet-dsp-api:1.0
+    image: mlafranca/onenet-dsp-api:1.1.1
     container_name: onenet-dsp-api-a
     ports:
       - "30001:30001"
@@ -35,7 +35,7 @@ services:
       - CENTRALIZED_SERVICES_API_URL=${CENTRALIZED_SERVICES_API_URL}
   connector-a:
     restart: unless-stopped
-    image: ghcr.io/engineering-research-and-development/dsp-true-connector:0.4.0
+    image: mlafranca/dsp-true-connector:0.4.0
     deploy:
       resources:
         limits:
@@ -87,7 +87,7 @@ services:
 ### instance b
   onenet-dsp-api-b:
     restart: unless-stopped
-    image: mlafranca/onenet-dsp-api:1.0
+    image: mlafranca/onenet-dsp-api:1.1.1
     container_name: onenet-dsp-api-b
     ports:
       - "30002:30001"
@@ -103,7 +103,7 @@ services:
       - CENTRALIZED_SERVICES_API_URL=${CENTRALIZED_SERVICES_API_URL}
   connector-b:
     restart: unless-stopped
-    image: ghcr.io/engineering-research-and-development/dsp-true-connector:0.4.0
+    image: mlafranca/dsp-true-connector:0.4.0
     deploy:
       resources:
         limits:

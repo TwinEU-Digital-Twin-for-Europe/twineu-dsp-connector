@@ -51,8 +51,9 @@ git clone https://github.com/TwinEU-Digital-Twin-for-Europe/onenet-dsp-connector
 cd twineu-dsp-connector/docker
 ```
 
-3.	Start the containers with the below command:
+3.	Update and Start the containers with the below commands:
 ```
+docker compose pull
 docker compose up -d
 ```
 The default configuration, recommended for connector testing, simulates a complete environment with 2 connectors within the same docker.

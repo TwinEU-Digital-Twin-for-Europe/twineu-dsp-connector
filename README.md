@@ -15,7 +15,7 @@ Furthermore, the project builds upon the work carried out with the [OneNet conne
 
 * the OneNet Middleware for centralized services such as Identity Management and Service Catalogue (extended)
 * the Semantic Vocabulary with more than 60 standardized services for the energy domain
-* New open-source advanced GUI
+* [New open-source advanced GUI](https://github.com/TwinEU-Digital-Twin-for-Europe/onenet-dsp-api)
 * Integration of External Service via REST APIs and Push mechanisms
 
 ## New Features 
@@ -144,9 +144,11 @@ http://localhost:8081/
 The url must be http://your_ip_where_the_containers_are_installed:30001/api
 In the default testing configuration two local-api are exposed to the URLs http://localhost:30001/api or  http://localhost:30002/api, one for connector a and one for connector b.
 
+
 #### Connector Url
 In the default testing configuration the connectors are exposed to the URLs http://connector-a:8080 or  http://connector-b:8080.
 
+**Warning: In a real environment, the connector URL must be exposed with a public IP address or DNS on the internet to allow all consumers to access the data provider.**
 ### Using the connector
 In the standard test environment with two connectors, you should have two users, each configured with a different connector. For example:
 
@@ -172,3 +174,9 @@ The Push mechanism flow is enabled by default. To disable the function use the e
 PUSH_ENABLED = **true|false**
 ```
 The Push URI can be configured in Push service creation interface.
+
+## Source code
+The source code can be found in the following repositories::
+* [Graphical User Interface](https://github.com/TwinEU-Digital-Twin-for-Europe/onenet-dsp-ui)
+* [DSP Connector API](https://github.com/TwinEU-Digital-Twin-for-Europe/onenet-dsp-api)
+* [DSP True Connector](https://github.com/Engineering-Research-and-Development/dsp-true-connector)

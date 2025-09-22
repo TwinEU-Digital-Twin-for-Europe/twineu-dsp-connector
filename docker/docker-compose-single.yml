@@ -1,3 +1,4 @@
+name: energy-dsp-connector-v2-0-2
 services:
 ### minio (simulated S3 cloud storage)
   minio:
@@ -18,7 +19,7 @@ services:
 ### intstance a
   onenet-dsp-api-a:
     restart: unless-stopped
-    image: mlafranca/onenet-dsp-api:1.1.1
+    image: mlafranca/onenet-dsp-api:1.1.2
     container_name: onenet-dsp-api-a
     ports:
       - "30001:30001"
@@ -93,6 +94,7 @@ services:
       - APP_PUSH_ENABLED=${PUSH_ENABLED}
       - APP_API_URL=/api
       - CENTRAL_API_URL=${CENTRALIZED_SERVICES_API_URL}
+      - APP_NAME=${APP_NAME}
     ports:
       - "8081:8080"
     restart: always

@@ -56,6 +56,7 @@ cd twineu-dsp-connector/docker
 docker compose pull
 docker compose up -d
 ```
+
 The default configuration, recommended for connector testing, simulates a complete environment with 2 connectors within the same docker.
 If, however, you want to use the connector in a real environment, or test it with 2 independent machines, please read section [Deploy a single connector instance](#deploy-a-single-connector-instance).
 
@@ -74,6 +75,9 @@ To stop all the containers use:
 ```
 docker compose down
 ```
+
+> [!WARNING]
+> Setting up the connector on a server will expose ports to the internet; ensure this is done carefully to maintain security.
 
 ### Hints
 

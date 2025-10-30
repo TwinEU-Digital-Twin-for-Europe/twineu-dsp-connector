@@ -97,6 +97,8 @@ docker compose -f docker-compose-single.yml down
 ```
 This configuration is recommended for installing a connector production node because it allows you to launch a single connector instance and save hardware resources.
 
+---
+
 #### Optional proxy configuration (using nginx)
 Optionally you can use nginx as proxy.
 
@@ -115,7 +117,7 @@ services:
        - ./nginx.conf:/etc/nginx/conf.d/default.conf
 ``` 
 
-The [(_nginx.conf_)]contains header management, SSL configuration and location directives necessary for the correct functioning of the connector.
+The *nginx.conf* contains header management, SSL configuration and location directives necessary for the correct functioning of the connector.
 
 In particular, for each service to be exposed, a location type directive must be defined with the following configurations (please replace the _**path**_ and _**uri**_ placeholders with your own values):
 ```
@@ -133,6 +135,227 @@ In particular, for each service to be exposed, a location type directive must be
 ``` 
 
 For further information, refer to the [Official Nginx Guide](https://nginx.org/en/docs/).
+
+---
+
+#### Optional Configuration: Traefik as HTTPS Reverse Proxy with Self-Signed Certificates in Docker
+This section outlines the configuration of Traefik as an HTTPS reverse proxy using self-signed certificates, suitable for development and testing environments.
+
+In production environments, it is recommended to use valid certificates issued by a Certification Authority (CA).
+
+Traefik natively supports integration with Let's Encrypt for automatic TLS certificate generation and renewal. For more information, please refer to the [Official Traefik Let's Encrypt Documentation](https://doc.traefik.io/traefik/reference/install-configuration/tls/certificate-resolvers/acme/).
+
+##### 1. Generate self signed TLS certificates
+Create the */certs* folder and generate a self-signed certificate with OpenSLL:
+```
+mkdir -p onenet-dsp-connector/docker/certs
+cd onenet-dsp-connector/docker/certs
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout selfsigned.key -out selfsigned.crt -subj "/CN=localhost"
+```
+If valid certificates are available, they should be placed in the *certs* directory, and Traefik must be configured accordingly to utilize them.
+
+##### 2. Update the Docker Compose file
+It is recommended to expose the DSP Connector services (connector-a, connector-b), the One-Net DSP API instances (onenet-dsp-api-a, onenet-dsp-api-b), the DSP Connector user Interface (dsp-connector-ui), and the monitoring tool (dozzle) via Traefik.
+
+For simplicity, this guide demonstrates how to configure Traefik for a single connector instance. However, the same configuration principles can be easily extended to support multiple instances.
+
+From the project folder, go into the */docker* directory and edit the *docker-compose-single.yml* file to add the necessary Traefik configuration and labels for the services intended to be routed.
+
+###### 2.1. Traefik Configuration Using Dedicated HTTPS Ports
+In this configuration, each internal service is exposed externally through Traefik on its own unique HTTPS port.
+
+###### _2.1.1. Traefik generic configuration_
+Add the following Traefik service definition to *docker-compose-single.yml*, under the services section:
+
+```yaml
+services:
+  traefik:
+    image: traefik:v3.4
+    container_name: traefik
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8445:8445"  # onenet-dsp-api-a
+      - "8446:8446"  # connector-a
+      - "8447:8447"  # dsp-connector-ui
+      - "8448:8448"  # dozzle
+    command:
+      - "--api.dashboard=true"
+      - "--api.insecure=false"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.websecure.http.tls=true"
+      - "--entrypoints.onenet-dsp-api-a.address=:8445"
+      - "--entrypoints.onenet-dsp-api-a.http.tls=true"
+      - "--entrypoints.connector-a.address=:8446"
+      - "--entrypoints.connector-a.http.tls=true"
+      - "--entrypoints.dsp-connector-ui.address=:8447"
+      - "--entrypoints.dsp-connector-ui.http.tls=true"
+      - "--entrypoints.dozzle.address=:8448"
+      - "--entrypoints.dozzle.http.tls=true"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./certs/selfsigned.crt:/certs/selfsigned.crt:ro"
+      - "./certs/selfsigned.key:/certs/selfsigned.key:ro"
+    networks:
+      - network-a
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.traefik.rule: "Host(`localhost`)"
+      traefik.http.routers.traefik.entrypoints: "websecure"
+      traefik.http.routers.traefik.service: "api@internal"
+      traefik.http.routers.traefik.tls: "true"
+      # Dashboard basic authentication with user "admin" and password "admin"
+      traefik.http.routers.traefik.middlewares: "auth"
+      traefik.http.middlewares.auth.basicauth.users: "admin:$$apr1$$CMWeiHUf$$TvQKxOv1dtRYaoh.5mH5o1"
+      traefik.http.middlewares.redirect-to-https.redirectscheme.scheme: "https"
+      traefik.http.routers.http-catchall.rule: "HostRegexp(`{host:.+}`)"
+      traefik.http.routers.http-catchall.entrypoints: "web"
+      traefik.http.routers.http-catchall.middlewares: "redirect-to-https"
+      traefik.http.routers.http-catchall.priority: "1"
+```
+Details:
+* Each internal HTTP service should be exposed on a dedicated HTTPS port through Traefik, by configuring separate entrypoints for each service.
+* For each of these ports, a corresponding Traefik entrypoint must be configured so that Traefik listens on that port and routes traffic directly and securely to the appropriate internal service.
+* Traefik itself is configured with a secured dashboard, accessible only via *localhost* on HTTPS, protected with basic authentication.
+* A global HTTP-to-HTTPS redirect middleware is configured to ensure all incoming HTTP requests are automatically redirected to HTTPS, improving security.
+* If a public domain is available, it is recommended to configure the routers with a rule based on the domain name (e.g., `Host('service.example.com')`) instead of *localhost*, and to ensure that the domain correctly resolves to the host where Traefik is running.
+
+###### _2.1.2. Exposing Services via Traefik_
+To make your services accessible through Traefik using dedicated HTTPS ports, add the following labels to each service you want to publish:
+```yaml
+labels:
+  - "traefik.enable=true"
+  - "traefik.http.routers.<service-name>.entrypoints=<service-name>"
+  - "traefik.http.routers.<service-name>.rule=PathPrefix(`/`)"
+  - "traefik.http.routers.<service-name>.tls=true"
+  - "traefik.http.services.<service-name>.loadbalancer.server.port=<internal-service-port>"
+```
+Details:
+
+* Replace `<service-name>` with a unique identifier for your service (e.g., connector-a). This must match the Traefik entrypoint configured for the service.
+* Replace `<internal-service-port>` with the internal port the service listens on inside the container.
+* The rule `PathPrefix("/")` matches all requests received on the configured port. If using a domain instead of *localhost*, consider using a `Host("<domain>")` rule to match based on the domain name.
+
+##### _2.1.3. Run and access the services_
+After running the application, the services will be securely accessible via HTTPS at the following ports:
+
+* `https://<domain-or-localhost>:8445` → OneNet DSP API A
+* `https://<domain-or-localhost>:8446` → Connector A
+* `https://<domain-or-localhost>:8447` → DSP Connector UI
+* `https://<domain-or-localhost>:8448` → Dozzle Dashboard
+* `https://<domain-or-localhost>` → Traefik Dashboard (requires basic auth)
+
+Note: If a self-signed certificate is used, the browser may display a security warning. This can typically be bypassed for local development by accepting the risk.
+
+###### 2.2. Traefik Configuration Using URL Path Prefixes
+This configuration exposes internal services externally via Traefik on the standard HTTPS port (443), routing requests based on distinct URL path prefixes.
+
+###### _2.2.1. Traefik generic configuration_
+Add the following Traefik service definition to *docker-compose-single.yml*, under the services section:
+
+```yaml
+  traefik:
+    image: traefik:v3.4
+    container_name: traefik
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.websecure.http.tls=true"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./certs/selfsigned.crt:/certs/selfsigned.crt:ro"
+      - "./certs/selfsigned.key:/certs/selfsigned.key:ro"
+    networks:
+      - network-a
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.http-catchall.rule=Host(`localhost`)"
+      - "traefik.http.routers.http-catchall.entrypoints=web"
+      - "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+```
+Details:
+* A global HTTP-to-HTTPS redirect middleware is configured to ensure all incoming HTTP requests are automatically redirected to HTTPS, improving security.
+* If a public domain is available, it is recommended to configure the routers with a rule based on the domain name (e.g., `Host('service.example.com')`) instead of *localhost*, and to ensure that the domain correctly resolves to the host where Traefik is running.
+* The Traefik dashboard is not exposed in this configuration.
+
+###### _2.2.2. Exposing Services via Traefik_
+To expose your services through Traefik using a Path Prefix and HTTPS, add the following labels to each service you want to publish:
+```yaml
+labels:
+  - "traefik.enable=true"
+  - "traefik.http.routers.<service-name>.rule=Host(`<domain>`) && PathPrefix(`/<path-prefix>`)"
+  - "traefik.http.routers.<service-name>.entrypoints=websecure"
+  - "traefik.http.routers.<service-name>.tls=true"
+  - "traefik.http.services.<service-name>.loadbalancer.server.port=<internal-service-port>"
+  - "traefik.http.routers.<service-name>.middlewares=strip-<service-name>"
+  - "traefik.http.middlewares.strip-<service-name>.stripprefix.prefixes=/<path-prefix>"
+```
+Details:
+* Replace `<service-name>` with a unique identifier for your service (e.g., connector-a).
+* Replace `<path-prefix>` with the path prefix under which the service will be reachable.
+* Replace `<domain>` with the domain where the service will be accessible (e.g., `Host('service.example.com')` or `Host('localhost')` for local testing).
+* Replace `<internal-service-port>` with the internal port the service listens on inside the container.
+* *websecure* is the Traefik entrypoint configured for HTTPS (commonly port 443).
+* Services are labeled with routing rules matching the appropriate path prefixes and associated middlewares.
+* Middlewares are used to strip the path prefixes before forwarding requests to internal services.
+
+Notes:
+
+Some services, like Dozzle or certain GUI frontends, do not natively support being served under a path prefix due to how they handle internal routing and resources, which may cause issues with resource loading and redirects.
+
+For these services, additional configuration or alternative approaches are needed to ensure proper functionality; it is generally recommended to expose them using a dedicated domain, a dedicated HTTPS port, or restrict access to internal networks only.
+
+For *Dozzle*, the issue can be resolved by setting the environment variable `DOZZLE_BASE` to match the path prefix, as shown below:
+```yaml
+dozzle:
+  image: amir20/dozzle:latest
+  container_name: dozzle
+  environment:
+    - DOZZLE_BASE=/dozzle
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+  networks:
+    - network-a
+  labels:
+    - "traefik.enable=true"
+    - "traefik.http.routers.dozzle.rule=Host(`localhost`) && PathPrefix(`/dozzle`)"
+    - "traefik.http.routers.dozzle.entrypoints=websecure"
+    - "traefik.http.routers.dozzle.tls=true"
+    - "traefik.http.services.dozzle.loadbalancer.server.port=8080"
+```
+
+For the *DSP Connector UI*, it is preferable to serve the service directly on the root path (/).
+The example below shows the corresponding Traefik labels configuration:
+```yaml
+  labels:
+    - "traefik.enable=true"
+    - "traefik.http.routers.dsp-connector-ui.rule=Host(`localhost`) && PathPrefix(`/`)"
+    - "traefik.http.routers.dsp-connector-ui.entrypoints=websecure"
+    - "traefik.http.routers.dsp-connector-ui.tls=true"
+    - "traefik.http.services.dsp-connector-ui.loadbalancer.server.port=8080"
+```
+###### _2.2.3. Run and access the services_
+After running the application, the services will be securely accessible via HTTPS under the configured path prefixes:
+
+* `https://<domain-or-localhost>` --> DSP Connector UI
+* `https://<domain-or-localhost>/<path-prefix>` --> Corresponding service
+
+<br />
+
+For more detailed information and advanced configurations, check out the official Traefik documentation:
+* [Traefik Documentation Homepage](https://doc.traefik.io/traefik/)
+* [Getting Started with Docker and Traefik](https://doc.traefik.io/traefik/getting-started/docker/)
 
 ### Login & Connector Settings
 A Graphical User Interface is available together with TwinEU Connector. It can be accessed through the url:

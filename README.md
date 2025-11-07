@@ -395,6 +395,36 @@ You can use *user1* as the provider and *user2* as the consumer or viceversa.
 
 Inside the */docker* project folder, there is an *.env* environment configuration file. This file allows you to set all Back End configurations of the TwinEU DSP Connector. 
 
+#### Connector ENDPOINT API URL
+In a real (production) environment, each connector must be exposed with a public IP address or DNS name so that all consumers can access the data provider.
+
+Update the following environment variables accordingly: 
+
+```
+CONNECTOR_A_ENDPOINT_API_URL=https://<public_ip_address:port or domain>
+CONNECTOR_B_ENDPOINT_API_URL=https://<public_ip_address:port or domain>
+```
+
+**Important**
+- Make sure the URL is reachable from outside your local network.
+- If HTTPS is not configured, you may temporarily use HTTP for testing (e.g., http://<public_ip_address>:port), but HTTPS is strongly recommended in production.
+
+#### S3 External Presigned Endpoint Configuration
+In the test environment, when running two connectors on the same machine, the default configuration uses the internal MinIO address:
+```
+S3_EXTERNAL_PRESIGNED_ENDPOINT = **http://minio:9000**
+```
+In a production environment, you need to publicly expose MinIO (or use Amazon S3) and update this environment variable accordingly:
+
+```
+S3_EXTERNAL_PRESIGNED_ENDPOINT = **https://<public_ip_address or domain>:<public_port>**
+```
+
+**Important**
+- If you use a proxy (e.g., Nginx), do not configure MinIO under a subpath (e.g., https://domain.com/minio/), because MinIO does not support subpaths.
+- Use a dedicated domain or subdomain instead (e.g., https://minio.domain.com/).
+- If you are using HTTP instead of HTTPS, you can also expose MinIO directly on the port (e.g., http://<public_ip_address>:9000).
+
 #### Push Mechanism Flow
 The Push mechanism flow is enabled by default. To disable the function use the env variable below.
 ```

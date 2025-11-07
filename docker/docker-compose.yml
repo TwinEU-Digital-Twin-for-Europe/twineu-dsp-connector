@@ -1,4 +1,4 @@
-name: energy-dsp-connector-v2-1-0
+name: energy-dsp-connector-v2-1-1
 services:
 ### minio (simulated S3 cloud storage)
   minio:
@@ -67,6 +67,7 @@ services:
       - DAPS_KEYSTORE_ALIAS=${KEYSTORE_ALIAS}
       - TRUSTSTORE_NAME=${TRUSTSTORE_NAME}
       - TRUSTSTORE_PASSWORD=${TRUSTSTORE_PASSWORD}
+      - S3_EXTERNAL_PRESIGNED_ENDPOINT=${S3_EXTERNAL_PRESIGNED_ENDPOINT}
     volumes:
       - ./connector_a_resources:/config
       - ./tc_cert:/cert
@@ -88,7 +89,7 @@ services:
 ### instance b
   onenet-dsp-api-b:
     restart: unless-stopped
-    image: mlafranca/onenet-dsp-api:1.1.3
+    image: mlafranca/onenet-dsp-api:1.1.4
     container_name: onenet-dsp-api-b
     ports:
       - "30002:30001"
@@ -135,6 +136,7 @@ services:
       - DAPS_KEYSTORE_ALIAS=${KEYSTORE_ALIAS}
       - TRUSTSTORE_NAME=${TRUSTSTORE_NAME}
       - TRUSTSTORE_PASSWORD=${TRUSTSTORE_PASSWORD}
+      - S3_EXTERNAL_PRESIGNED_ENDPOINT=${S3_EXTERNAL_PRESIGNED_ENDPOINT}
     volumes:
       - ./connector_b_resources:/config
       - ./tc_cert:/cert
@@ -165,6 +167,7 @@ services:
       - APP_API_URL=/api
       - CENTRAL_API_URL=${CENTRALIZED_SERVICES_API_URL}
       - APP_NAME=${APP_NAME}
+      - APP_BASE_PATH=
     ports:
       - "8081:8080"
     restart: always

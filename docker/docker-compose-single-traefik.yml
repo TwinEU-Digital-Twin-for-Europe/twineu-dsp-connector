@@ -1,0 +1,207 @@
+name: energy-dsp-connector-v2-1-3
+services:
+  traefik:
+    image: traefik:v3.4
+    container_name: traefik
+    restart: unless-stopped
+    networks:
+      - network-a
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8445:8445"  # onenet-dsp-api-a
+      - "8446:8446"  # connector-a
+      - "8447:8447"  # dsp-connector-ui
+      - "8448:8448"  # dozzle
+      - "9443:9443"  # minio
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik/acme.json:/acme.json
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.websecure.http.tls=true"
+      - "--entrypoints.onenet-dsp-api-a.address=:8445"
+      - "--entrypoints.onenet-dsp-api-a.http.tls=true"
+      - "--entrypoints.connector-a.address=:8446"
+      - "--entrypoints.connector-a.http.tls=true"
+      - "--entrypoints.dsp-connector-ui.address=:8447"
+      - "--entrypoints.dsp-connector-ui.http.tls=true"
+      - "--entrypoints.dozzle.address=:8448"
+      - "--entrypoints.dozzle.http.tls=true"
+      - "--entrypoints.minio.address=:9443"
+      - "--entrypoints.minio.http.tls=true"
+      - "--api.dashboard=true"
+      - "--api.insecure=false"
+      - "--certificatesresolvers.resolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.resolver.acme.httpchallenge=true"
+      - "--certificatesresolvers.resolver.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.resolver.acme.email=<email>"
+      - "--certificatesresolvers.resolver.acme.storage=/acme.json"
+      # - "--log.level=DEBUG"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.entrypoints=websecure"
+      - "traefik.http.routers.traefik.rule=Host(`<domain>`)"
+      - "traefik.http.routers.traefik.service=api@internal"
+      - "traefik.http.routers.traefik.tls=true"
+      - "traefik.http.routers.traefik.tls.certresolver=resolver"
+      - "traefik.http.routers.traefik.middlewares=auth"
+      - "traefik.http.middlewares.auth.basicauth.users=admin:$$apr1$$CMWeiHUf$$TvQKxOv1dtRYaoh.5mH5o1"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.http-catchall.rule=HostRegexp(`{host:.+}`)"
+      - "traefik.http.routers.http-catchall.entrypoints=web"
+      - "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
+      - "traefik.http.routers.http-catchall.priority=1"
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+
+  minio:
+    image: minio/minio
+    container_name: minio
+    networks:
+      - network-a
+    volumes:
+      - minio_data:/data
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+      - MINIO_BROWSER=off
+    command: server /data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.minio.entrypoints=minio"
+      - "traefik.http.routers.minio.rule=Host(`<domain>`)"
+      - "traefik.http.routers.minio.tls=true"
+      - "traefik.http.routers.minio.tls.certresolver=resolver"
+      - "traefik.http.services.minio.loadbalancer.server.port=9000"
+
+  onenet-dsp-api-a:
+    image: mlafranca/onenet-dsp-api:1.1.5
+    container_name: onenet-dsp-api-a
+    restart: unless-stopped
+    depends_on:
+      - connector-a
+    networks:
+      - network-a
+    volumes:
+      - ./onenet_dsp_api_a_resources:/config
+    environment:
+      - CONNECTOR_URL=${CONNECTOR_A_ENDPOINT_API_URL}
+      - CONNECTOR_BASIC_AUTHENTICATION=${CONNECTOR_BASIC_AUTHENTICATION}
+      - CENTRALIZED_SERVICES_API_URL=${CENTRALIZED_SERVICES_API_URL}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.onenet-dsp-api-a.entrypoints=onenet-dsp-api-a"
+      - "traefik.http.routers.onenet-dsp-api-a.rule=Host(`<domain>`)"
+      - "traefik.http.routers.onenet-dsp-api-a.tls=true"
+      - "traefik.http.routers.onenet-dsp-api-a.tls.certresolver=resolver"
+      - "traefik.http.services.onenet-dsp-api-a.loadbalancer.server.port=30001"
+
+  connector-a:
+    image: mlafranca/dsp-true-connector:0.5.0
+    container_name: connector-a
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 1024M
+    logging:
+      options:
+        max-size: "200M"
+    networks:
+      - network-a
+    ports:
+      - "8888:2222" # FTP
+    depends_on:
+      - mongodb-a
+      - minio
+    environment:
+      - "JDK_JAVA_OPTIONS=-Xmx1024m"
+      - CALLBACK_ADDRESS=${CONNECTOR_A_ENDPOINT_API_URL}
+      - KEYSTORE_NAME=${CONNECTOR_A_KEYSTORE_NAME}
+      - KEY_PASSWORD=${CONNECTOR_A_KEY_PASSWORD}
+      - KEYSTORE_PASSWORD=${CONNECTOR_A_KEYSTORE_PASSWORD}
+      - KEYSTORE_ALIAS=${CONNECTOR_A_KEYSTORE_ALIAS}
+      - DAPS_KEYSTORE_NAME=${DAPS_KEYSTORE_NAME}
+      - DAPS_KEYSTORE_PASSWORD=${DAPS_KEYSTORE_PASSWORD}
+      - DAPS_KEYSTORE_ALIAS=${KEYSTORE_ALIAS}
+      - TRUSTSTORE_NAME=${TRUSTSTORE_NAME}
+      - TRUSTSTORE_PASSWORD=${TRUSTSTORE_PASSWORD}
+      - S3_EXTERNAL_PRESIGNED_ENDPOINT=${S3_EXTERNAL_PRESIGNED_ENDPOINT}
+    volumes:
+      - ./connector_a_resources:/config
+      - ./tc_cert:/cert
+      - ./:/home/nobody/ftp
+      - tc_a_log:/var/log/tc
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.connector-a.entrypoints=connector-a"
+      - "traefik.http.routers.connector-a.rule=Host(`<domain>`)"
+      - "traefik.http.routers.connector-a.tls=true"
+      - "traefik.http.routers.connector-a.tls.certresolver=resolver"
+      - "traefik.http.services.connector-a.loadbalancer.server.port=8080"
+
+  mongodb-a:
+    image: mongo:7.0.12
+    container_name: mongodb-a
+    restart: unless-stopped
+    networks:
+      - network-a
+    volumes:
+      - mongodb-data_a:/data/db
+      - mongodb-configdb_a:/data/configdb
+
+  dsp-connector-ui:
+    image: gdimarco/data-space-connector-ui:2.1.3
+    container_name: dsp-connector-ui
+    restart: always
+    networks:
+      - network-a
+    volumes:
+      - ./connector-ui/nginx-conf/ui-nginx.conf:/etc/nginx/templates/ui-nginx.conf.template
+      - ./connector-ui/theme/onenet:/usr/share/nginx/html/img/theme
+    environment:
+      - APP_PUSH_ENABLED=${PUSH_ENABLED}
+      - APP_API_URL=/api
+      - CENTRAL_API_URL=${CENTRALIZED_SERVICES_API_URL}
+      - APP_NAME=${APP_NAME}
+      - APP_BASE_PATH=
+      - APP_NATS_ENABLED=${NATS_ENABLED}
+      - APP_KAFKA_ENABLED=${KAFKA_ENABLED}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dsp-connector-ui.entrypoints=dsp-connector-ui"
+      - "traefik.http.routers.dsp-connector-ui.rule=Host(`<domain>`)"
+      - "traefik.http.routers.dsp-connector-ui.tls=true"
+      - "traefik.http.routers.dsp-connector-ui.tls.certresolver=resolver"
+      - "traefik.http.services.dsp-connector-ui.loadbalancer.server.port=8080"
+
+  dozzle:
+    image: amir20/dozzle:latest
+    container_name: dozzle
+    restart: unless-stopped
+    networks:
+      - network-a
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dozzle.entrypoints=dozzle"
+      - "traefik.http.routers.dozzle.rule=Host(`<domain>`)"
+      - "traefik.http.routers.dozzle.tls=true"
+      - "traefik.http.routers.dozzle.tls.certresolver=resolver"
+      - "traefik.http.services.dozzle.loadbalancer.server.port=8080"
+
+networks:
+  network-a: {}
+
+volumes:
+  minio_data: {}
+  tc_a_log: {}
+  mongodb-data_a: {}
+  mongodb-configdb_a: {}

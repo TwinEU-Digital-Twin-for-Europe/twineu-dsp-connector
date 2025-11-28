@@ -160,7 +160,7 @@ services:
     container_name: dsp-connector-ui
     volumes:
       - ./connector-ui/nginx-conf/ui-nginx.conf:/etc/nginx/templates/ui-nginx.conf.template
-      - ./connector-ui/theme/onenet:/usr/share/nginx/html/img/theme
+      - ./connector-ui/theme/twineu:/usr/share/nginx/html/img/theme
     environment:
       - APP_PUSH_ENABLED=${PUSH_ENABLED}
       - APP_API_URL=/api

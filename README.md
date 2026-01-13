@@ -56,7 +56,6 @@ cd twineu-dsp-connector/docker
 docker compose pull
 docker compose up -d
 ```
-
 The default configuration, recommended for connector testing, simulates a complete environment with 2 connectors within the same docker.
 If, however, you want to use the connector in a real environment, or test it with 2 independent machines, please read section [Deploy a single connector instance](#deploy-a-single-connector-instance).
 
@@ -195,7 +194,6 @@ services:
       - "--entrypoints.dozzle.http.tls=true"
       - "--entrypoints.minio.address=:9443"
       - "--entrypoints.minio.http.tls=true"
-      - "--certificatesresolvers.resolver.acme.tlschallenge=true"
       - "--certificatesresolvers.resolver.acme.httpchallenge=true"
       - "--certificatesresolvers.resolver.acme.httpchallenge.entrypoint=web"
       - "--certificatesresolvers.resolver.acme.email=<email>"
@@ -224,6 +222,7 @@ Details:
 * A global HTTP-to-HTTPS redirect middleware is configured to ensure all incoming HTTP requests are automatically redirected to HTTPS, improving security.
 * Replace `<domain>` with the domain or host where the service will be accessible.
 * Replace `<email>` with the email address that must be used for Let's Encrypt certificate registration.
+* Before starting the Traefik container, ensure that a `/traefik` directory exists with a writable `acme.json` file, required for Traefik to store Let's Encrypt certificates.
 
 ###### _1.2. Exposing Services via Traefik_
 To make your services accessible through Traefik using dedicated HTTPS ports, add the following labels to each service you want to publish:
@@ -307,7 +306,6 @@ Add the following Traefik service definition to *docker-compose-single.yml*, und
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
       - "--entrypoints.websecure.http.tls=true"
-      - "--certificatesresolvers.resolver.acme.tlschallenge=true"
       - "--certificatesresolvers.resolver.acme.httpchallenge=true"
       - "--certificatesresolvers.resolver.acme.httpchallenge.entrypoint=web"
       - "--certificatesresolvers.resolver.acme.email=<email>"
@@ -323,6 +321,7 @@ Details:
 * A global HTTP-to-HTTPS redirect middleware is configured to ensure all incoming HTTP requests are automatically redirected to HTTPS, improving security.
 * Replace `<domain>` with the domain or host where the service will be accessible.
 * Replace `<email>` with the email address that must be used for Let's Encrypt certificate registration.
+* Before starting the Traefik container, ensure that a `/traefik` directory exists with a writable `acme.json` file, required for Traefik to store Let's Encrypt certificates.
 * The Traefik dashboard is not exposed in this configuration.
 
 ###### _2.2. Exposing Services via Traefik_
@@ -425,8 +424,6 @@ user2 (consumer):
 - Endpoint connector URL: http://connector-b:8080
 
 You can use *user1* as the provider and *user2* as the consumer or viceversa.
-
-
 
 ### Environment Configuration
 

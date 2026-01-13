@@ -1,4 +1,4 @@
-name: energy-dsp-connector-v2-1-3
+name: energy-dsp-connector-v2-1-5
 services:
 ### minio (simulated S3 cloud storage)
   minio:
@@ -75,7 +75,7 @@ services:
   mongodb-a:
     restart: unless-stopped
     container_name: mongodb-a
-    image: mongo:7.0.12
+    image: mongo:7.0.28
     networks:
       - network-a
     ports:
@@ -86,7 +86,7 @@ services:
   
 
   dsp-connector-ui:
-    image: gdimarco/data-space-connector-ui:2.1.3
+    image: gdimarco/data-space-connector-ui:2.1.5
     container_name: dsp-connector-ui
     volumes:
       - ./connector-ui/nginx-conf/ui-nginx.conf:/etc/nginx/templates/ui-nginx.conf.template

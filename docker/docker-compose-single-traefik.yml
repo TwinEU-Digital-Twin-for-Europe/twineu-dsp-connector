@@ -5,7 +5,8 @@ services:
     container_name: traefik
     restart: unless-stopped
     networks:
-      - network-a
+      network-a:
+        ipv4_address: 172.18.0.4
     ports:
       - "80:80"
       - "443:443"
@@ -37,18 +38,18 @@ services:
       - "--api.insecure=false"
       - "--certificatesresolvers.resolver.acme.httpchallenge=true"
       - "--certificatesresolvers.resolver.acme.httpchallenge.entrypoint=web"
-      - "--certificatesresolvers.resolver.acme.email=<email>"
+      - "--certificatesresolvers.resolver.acme.email=${LETSENCRYPT_EMAIL}"
       - "--certificatesresolvers.resolver.acme.storage=/acme.json"
       # - "--log.level=DEBUG"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.traefik.entrypoints=websecure"
-      - "traefik.http.routers.traefik.rule=Host(`<domain>`)"
+      - "traefik.http.routers.traefik.rule=Host(`${DOMAIN_URL}`)"
       - "traefik.http.routers.traefik.service=api@internal"
       - "traefik.http.routers.traefik.tls=true"
       - "traefik.http.routers.traefik.tls.certresolver=resolver"
       - "traefik.http.routers.traefik.middlewares=auth"
-      - "traefik.http.middlewares.auth.basicauth.users=admin:$$apr1$$CMWeiHUf$$TvQKxOv1dtRYaoh.5mH5o1"
+      - "traefik.http.middlewares.auth.basicauth.users=${TRAEFIK_PASSWORD}"
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
       - "traefik.http.routers.http-catchall.rule=HostRegexp(`{host:.+}`)"
       - "traefik.http.routers.http-catchall.entrypoints=web"
@@ -65,6 +66,8 @@ services:
       - network-a
     volumes:
       - minio_data:/data
+    extra_hosts:
+      - "${DOMAIN_URL}:172.18.0.4" 
     environment:
       - MINIO_ROOT_USER=minioadmin
       - MINIO_ROOT_PASSWORD=minioadmin
@@ -73,7 +76,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.minio.entrypoints=minio"
-      - "traefik.http.routers.minio.rule=Host(`<domain>`)"
+      - "traefik.http.routers.minio.rule=Host(`${DOMAIN_URL}`)"
       - "traefik.http.routers.minio.tls=true"
       - "traefik.http.routers.minio.tls.certresolver=resolver"
       - "traefik.http.services.minio.loadbalancer.server.port=9000"
@@ -88,6 +91,8 @@ services:
       - network-a
     volumes:
       - ./onenet_dsp_api_a_resources:/config
+    extra_hosts:
+      - "${DOMAIN_URL}:172.18.0.4" 
     environment:
       - CONNECTOR_URL=${CONNECTOR_A_ENDPOINT_API_URL}
       - CONNECTOR_BASIC_AUTHENTICATION=${CONNECTOR_BASIC_AUTHENTICATION}
@@ -95,7 +100,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.onenet-dsp-api-a.entrypoints=onenet-dsp-api-a"
-      - "traefik.http.routers.onenet-dsp-api-a.rule=Host(`<domain>`)"
+      - "traefik.http.routers.onenet-dsp-api-a.rule=Host(`${DOMAIN_URL}`)"
       - "traefik.http.routers.onenet-dsp-api-a.tls=true"
       - "traefik.http.routers.onenet-dsp-api-a.tls.certresolver=resolver"
       - "traefik.http.services.onenet-dsp-api-a.loadbalancer.server.port=30001"
@@ -116,6 +121,8 @@ services:
       - network-a
     ports:
       - "8888:2222" # FTP
+    extra_hosts:
+      - "${DOMAIN_URL}:172.18.0.4" 
     depends_on:
       - mongodb-a
       - minio
@@ -140,7 +147,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.connector-a.entrypoints=connector-a"
-      - "traefik.http.routers.connector-a.rule=Host(`<domain>`)"
+      - "traefik.http.routers.connector-a.rule=Host(`${DOMAIN_URL}`)"
       - "traefik.http.routers.connector-a.tls=true"
       - "traefik.http.routers.connector-a.tls.certresolver=resolver"
       - "traefik.http.services.connector-a.loadbalancer.server.port=8080"
@@ -154,6 +161,8 @@ services:
     volumes:
       - mongodb-data_a:/data/db
       - mongodb-configdb_a:/data/configdb
+    extra_hosts:
+      - "${DOMAIN_URL}:172.18.0.4" 
 
   dsp-connector-ui:
     image: gdimarco/data-space-connector-ui:2.1.5
@@ -161,6 +170,8 @@ services:
     restart: always
     networks:
       - network-a
+    extra_hosts:
+      - "${DOMAIN_URL}:172.18.0.4" 
     volumes:
       - ./connector-ui/nginx-conf/ui-nginx.conf:/etc/nginx/templates/ui-nginx.conf.template
       - ./connector-ui/theme/twineu:/usr/share/nginx/html/img/theme
@@ -175,7 +186,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.dsp-connector-ui.entrypoints=dsp-connector-ui"
-      - "traefik.http.routers.dsp-connector-ui.rule=Host(`<domain>`)"
+      - "traefik.http.routers.dsp-connector-ui.rule=Host(`${DOMAIN_URL}`)"
       - "traefik.http.routers.dsp-connector-ui.tls=true"
       - "traefik.http.routers.dsp-connector-ui.tls.certresolver=resolver"
       - "traefik.http.services.dsp-connector-ui.loadbalancer.server.port=8080"
@@ -191,13 +202,17 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.dozzle.entrypoints=dozzle"
-      - "traefik.http.routers.dozzle.rule=Host(`<domain>`)"
+      - "traefik.http.routers.dozzle.rule=Host(`${DOMAIN_URL}`)"
       - "traefik.http.routers.dozzle.tls=true"
       - "traefik.http.routers.dozzle.tls.certresolver=resolver"
       - "traefik.http.services.dozzle.loadbalancer.server.port=8080"
 
 networks:
-  network-a: {}
+  network-a:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
 
 volumes:
   minio_data: {}

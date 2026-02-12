@@ -427,7 +427,7 @@ You can use *user1* as the provider and *user2* as the consumer or viceversa.
 
 ### Environment Configuration
 
-Inside the */docker* project folder, there is an *.env* environment configuration file. This file allows you to set all Back End configurations of the TwinEU DSP Connector. 
+Inside the */docker* project folder, there is an *.env.example* environment configuration file. This file allows you to set all Back End configurations of the TwinEU DSP Connector. Rename it to *.env* and modify it for your setup.
 
 #### Connector ENDPOINT API URL
 In a real (production) environment, each connector must be exposed with a public IP address or DNS name so that all consumers can access the data provider.

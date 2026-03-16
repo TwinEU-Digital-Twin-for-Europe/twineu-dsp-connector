@@ -1,8 +1,8 @@
-name: energy-dsp-connector-v2-1-5
+name: energy-dsp-connector-v2-1-8
 services:
-### minio (simulated S3 cloud storage)
+  ### minio (simulated S3 cloud storage)
   minio:
-    image: minio/minio
+    image: minio/minio:RELEASE.2025-09-07T16-13-09Z
     networks:
       - network-a
       - network-b
@@ -13,14 +13,14 @@ services:
     volumes:
       - minio_data:/data
     environment:
-      - MINIO_ROOT_USER=minioadmin
-      - MINIO_ROOT_PASSWORD=minioadmin
+      - MINIO_ROOT_USER=${MINIO_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_PASSWORD}
     command: server /data --console-address ":9001"
 
-### instance a
+  ### instance a
   onenet-dsp-api-a:
     restart: unless-stopped
-    image: mlafranca/onenet-dsp-api:1.1.5
+    image: mlafranca/onenet-dsp-api:1.1.7
     container_name: onenet-dsp-api-a
     ports:
       - "30001:30001"
@@ -34,9 +34,11 @@ services:
       - CONNECTOR_URL=${CONNECTOR_A_ENDPOINT_API_URL}
       - CONNECTOR_BASIC_AUTHENTICATION=${CONNECTOR_BASIC_AUTHENTICATION}
       - CENTRALIZED_SERVICES_API_URL=${CENTRALIZED_SERVICES_API_URL}
+      - NOTIFICATIONS_ENABLED=${NOTIFICATIONS_ENABLED}
+      - NOTIFICATION_MODULE_ENDPOINT=http://4.232.76.64/notification-module/api/v1
   connector-a:
     restart: unless-stopped
-    image: mlafranca/dsp-true-connector:0.5.0
+    image: mlafranca/dsp-true-connector:0.5.1
     deploy:
       resources:
         limits:
@@ -68,16 +70,18 @@ services:
       - TRUSTSTORE_NAME=${TRUSTSTORE_NAME}
       - TRUSTSTORE_PASSWORD=${TRUSTSTORE_PASSWORD}
       - S3_EXTERNAL_PRESIGNED_ENDPOINT=${S3_EXTERNAL_PRESIGNED_ENDPOINT}
+      - S3_ACCESS_KEY=${MINIO_USER}
+      - S3_SECRET_KEY=${MINIO_PASSWORD}
     volumes:
       - ./connector_a_resources:/config
       - ./tc_cert:/cert
       - ./:/home/nobody/ftp
       - tc_a_log:/var/log/tc
-      
+
   mongodb-a:
     restart: unless-stopped
     container_name: mongodb-a
-    image: mongo:7.0.28
+    image: mongo:7.0.30
     networks:
       - network-a
     ports:
@@ -85,11 +89,11 @@ services:
     volumes:
       - mongodb-data_a:/data/db
       - mongodb-configdb_a:/data/configdb
-      
-### instance b
+
+  ### instance b
   onenet-dsp-api-b:
     restart: unless-stopped
-    image: mlafranca/onenet-dsp-api:1.1.5
+    image: mlafranca/onenet-dsp-api:1.1.7
     container_name: onenet-dsp-api-b
     ports:
       - "30002:30001"
@@ -103,9 +107,11 @@ services:
       - CONNECTOR_URL=${CONNECTOR_B_ENDPOINT_API_URL}
       - CONNECTOR_BASIC_AUTHENTICATION=${CONNECTOR_BASIC_AUTHENTICATION}
       - CENTRALIZED_SERVICES_API_URL=${CENTRALIZED_SERVICES_API_URL}
+      - NOTIFICATIONS_ENABLED=${NOTIFICATIONS_ENABLED}
+      - NOTIFICATION_MODULE_ENDPOINT=http://4.232.76.64/notification-module/api/v1
   connector-b:
     restart: unless-stopped
-    image: mlafranca/dsp-true-connector:0.5.0
+    image: mlafranca/dsp-true-connector:0.5.1
     deploy:
       resources:
         limits:
@@ -137,16 +143,18 @@ services:
       - TRUSTSTORE_NAME=${TRUSTSTORE_NAME}
       - TRUSTSTORE_PASSWORD=${TRUSTSTORE_PASSWORD}
       - S3_EXTERNAL_PRESIGNED_ENDPOINT=${S3_EXTERNAL_PRESIGNED_ENDPOINT}
+      - S3_ACCESS_KEY=${MINIO_USER}
+      - S3_SECRET_KEY=${MINIO_PASSWORD}
     volumes:
       - ./connector_b_resources:/config
       - ./tc_cert:/cert
       - ./:/home/nobody/ftp
       - tc_b_log:/var/log/tc
-      
+
   mongodb-b:
     restart: unless-stopped
     container_name: mongodb-b
-    image: mongo:7.0.28
+    image: mongo:7.0.30
     networks:
       - network-b
     ports:
@@ -156,7 +164,7 @@ services:
       - mongodb-configdb_b:/data/configdb
 
   dsp-connector-ui:
-    image: gdimarco/data-space-connector-ui:2.1.5
+    image: gdimarco/data-space-connector-ui:2.1.8
     container_name: dsp-connector-ui
     volumes:
       - ./connector-ui/nginx-conf/ui-nginx.conf:/etc/nginx/templates/ui-nginx.conf.template
@@ -169,6 +177,8 @@ services:
       - APP_BASE_PATH=
       - APP_NATS_ENABLED=${NATS_ENABLED}
       - APP_KAFKA_ENABLED=${KAFKA_ENABLED}
+      - APP_ONENET_SETTINGS_ID=${ONENET_SETTINGS_ID}
+      - APP_NOTIFICATION_ENABLED=${NOTIFICATIONS_ENABLED}
     ports:
       - "8081:8080"
     restart: always
@@ -184,16 +194,16 @@ services:
     networks:
       - network-a
       - network-b
-      
+
 networks:
-  network-a: { }
-  network-b: { }
-  
+  network-a: {}
+  network-b: {}
+
 volumes:
-  minio_data: { }
-  tc_a_log: { }
-  mongodb-data_a: { }
-  mongodb-configdb_a: { }
-  tc_b_log: { }
-  mongodb-data_b: { }
-  mongodb-configdb_b: { }
+  minio_data: {}
+  tc_a_log: {}
+  mongodb-data_a: {}
+  mongodb-configdb_a: {}
+  tc_b_log: {}
+  mongodb-data_b: {}
+  mongodb-configdb_b: {}

@@ -1,4 +1,4 @@
-name: energy-dsp-connector-v2-1-5
+name: energy-dsp-connector-v2-1-8
 services:
   traefik:
     image: traefik:v3.4
@@ -59,15 +59,15 @@ services:
       - 8.8.8.8
 
   minio:
-    image: minio/minio
+    image: minio/minio:RELEASE.2025-09-07T16-13-09Z
     container_name: minio
     networks:
       - network-a
     volumes:
       - minio_data:/data
     environment:
-      - MINIO_ROOT_USER=minioadmin
-      - MINIO_ROOT_PASSWORD=minioadmin
+      - MINIO_ROOT_USER=${MINIO_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_PASSWORD}
       - MINIO_BROWSER=off
     command: server /data
     labels:
@@ -79,7 +79,7 @@ services:
       - "traefik.http.services.minio.loadbalancer.server.port=9000"
 
   onenet-dsp-api-a:
-    image: mlafranca/onenet-dsp-api:1.1.5
+    image: mlafranca/onenet-dsp-api:1.1.7
     container_name: onenet-dsp-api-a
     restart: unless-stopped
     depends_on:
@@ -92,6 +92,8 @@ services:
       - CONNECTOR_URL=${CONNECTOR_A_ENDPOINT_API_URL}
       - CONNECTOR_BASIC_AUTHENTICATION=${CONNECTOR_BASIC_AUTHENTICATION}
       - CENTRALIZED_SERVICES_API_URL=${CENTRALIZED_SERVICES_API_URL}
+      - NOTIFICATIONS_ENABLED=${NOTIFICATIONS_ENABLED}
+      - NOTIFICATION_MODULE_ENDPOINT=http://4.232.76.64/notification-module/api/v1
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.onenet-dsp-api-a.entrypoints=onenet-dsp-api-a"
@@ -101,7 +103,7 @@ services:
       - "traefik.http.services.onenet-dsp-api-a.loadbalancer.server.port=30001"
 
   connector-a:
-    image: mlafranca/dsp-true-connector:0.5.0
+    image: mlafranca/dsp-true-connector:0.5.1
     container_name: connector-a
     restart: unless-stopped
     deploy:
@@ -132,6 +134,8 @@ services:
       - TRUSTSTORE_NAME=${TRUSTSTORE_NAME}
       - TRUSTSTORE_PASSWORD=${TRUSTSTORE_PASSWORD}
       - S3_EXTERNAL_PRESIGNED_ENDPOINT=${S3_EXTERNAL_PRESIGNED_ENDPOINT}
+      - S3_ACCESS_KEY=${MINIO_USER}
+      - S3_SECRET_KEY=${MINIO_PASSWORD}
     volumes:
       - ./connector_a_resources:/config
       - ./tc_cert:/cert
@@ -146,7 +150,7 @@ services:
       - "traefik.http.services.connector-a.loadbalancer.server.port=8080"
 
   mongodb-a:
-    image: mongo:7.0.28
+    image: mongo:7.0.30
     container_name: mongodb-a
     restart: unless-stopped
     networks:
@@ -156,7 +160,7 @@ services:
       - mongodb-configdb_a:/data/configdb
 
   dsp-connector-ui:
-    image: gdimarco/data-space-connector-ui:2.1.5
+    image: gdimarco/data-space-connector-ui:2.1.8
     container_name: dsp-connector-ui
     restart: always
     networks:
@@ -172,6 +176,8 @@ services:
       - APP_BASE_PATH=
       - APP_NATS_ENABLED=${NATS_ENABLED}
       - APP_KAFKA_ENABLED=${KAFKA_ENABLED}
+      - APP_ONENET_SETTINGS_ID=${ONENET_SETTINGS_ID}
+      - APP_NOTIFICATION_ENABLED=${NOTIFICATIONS_ENABLED}
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.dsp-connector-ui.entrypoints=dsp-connector-ui"

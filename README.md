@@ -466,6 +466,11 @@ PUSH_ENABLED = **true|false**
 ```
 The Push URI can be configured in Push service creation interface.
 
+The same interface can also be used to configure authentication for external service calls. The main supported methods are:
+- No Authentication
+- Basic Authentication (username and password)
+- API Key (name and value), which can be sent either as a URL parameter or as an HTTP header
+
 #### NATS And Kafka Plugins
 In order to enable/disable plugin functionalities in the GUI you must set these variables:
 - NATS_ENABLED --> For NATS 

@@ -1,4 +1,4 @@
-name: energy-dsp-connector-v2-1-8
+name: energy-dsp-connector-v2-1-9
 services:
   ### minio (simulated S3 cloud storage)
   minio:
@@ -177,7 +177,7 @@ services:
       - APP_BASE_PATH=
       - APP_NATS_ENABLED=${NATS_ENABLED}
       - APP_KAFKA_ENABLED=${KAFKA_ENABLED}
-      - APP_ONENET_SETTINGS_ID=${ONENET_SETTINGS_ID}
+      - APP_ONENET_SETTINGS_ID=1
       - APP_NOTIFICATION_ENABLED=${NOTIFICATIONS_ENABLED}
     ports:
       - "8081:8080"

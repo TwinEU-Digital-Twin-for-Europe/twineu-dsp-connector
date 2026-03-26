@@ -89,7 +89,7 @@ services:
       - mongodb-configdb_a:/data/configdb
 
   dsp-connector-ui:
-    image: gdimarco/data-space-connector-ui:2.1.8
+    image: gdimarco/data-space-connector-ui:2.1.9
     container_name: dsp-connector-ui
     volumes:
       - ./connector-ui/nginx-conf/ui-nginx.conf:/etc/nginx/templates/ui-nginx.conf.template

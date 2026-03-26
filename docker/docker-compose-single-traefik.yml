@@ -169,7 +169,7 @@ services:
       - "${DOMAIN_URL}:172.18.0.4" 
 
   dsp-connector-ui:
-    image: gdimarco/data-space-connector-ui:2.1.8
+    image: gdimarco/data-space-connector-ui:2.1.9
     container_name: dsp-connector-ui
     restart: always
     networks:

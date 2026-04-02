@@ -15,7 +15,7 @@ Furthermore, the project builds upon the work carried out with the [OneNet conne
 
 * the OneNet Middleware for centralized services such as Identity Management and Service Catalogue (extended)
 * the Semantic Vocabulary with more than 60 standardized services for the energy domain
-* [New open-source advanced GUI](https://github.com/TwinEU-Digital-Twin-for-Europe/onenet-dsp-api)
+* [New open-source advanced GUI](https://github.com/TwinEU-Digital-Twin-for-Europe/twineu-dsp-api)
 * Integration of External Service via REST APIs and Push mechanisms
 
 ## New Features 

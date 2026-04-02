@@ -15,7 +15,7 @@ Furthermore, the project builds upon the work carried out with the [OneNet conne
 
 * the OneNet Middleware for centralized services such as Identity Management and Service Catalogue (extended)
 * the Semantic Vocabulary with more than 60 standardized services for the energy domain
-* [New open-source advanced GUI](https://github.com/TwinEU-Digital-Twin-for-Europe/twineu-dsp-api)
+* [New open-source advanced GUI](https://github.com/TwinEU-Digital-Twin-for-Europe/twineu-dsp-ui)
 * Integration of External Service via REST APIs and Push mechanisms
 
 ## New Features 
@@ -39,11 +39,11 @@ For the correct installation of docker and docker-compose, please refer to the o
 ## TwinEU DSP Connector v2 installation on Docker
 To proceed with the installation of TwinEU Connector, the user must use the docker folder of the github repository that contains all the necessary configuration.
 
-1.	The first step is to clone this repository https://github.com/TwinEU-Digital-Twin-for-Europe/data-space-connector in a specific folder (e.g. *twineu-framework*), by typing:
+1.	The first step is to clone this repository https://github.com/TwinEU-Digital-Twin-for-Europe/twineu-dsp-connector in a specific folder (e.g. *twineu-framework*), by typing:
 ```
 mkdir twineu-framework
 cd twineu-framework
-git clone https://github.com/TwinEU-Digital-Twin-for-Europe/onenet-dsp-connector.git
+git clone https://github.com/TwinEU-Digital-Twin-for-Europe/twineu-dsp-connector.git
 ```
 
 2.	There is the *docker-compose.yml* file located under the docker folder that contains all the configuration of the TwinEU DSP Connector containers. Go to that folder by typing the command:

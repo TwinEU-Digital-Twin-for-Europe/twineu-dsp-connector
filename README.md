@@ -478,6 +478,6 @@ In order to enable/disable plugin functionalities in the GUI you must set these 
 
 ## Source code
 The source code can be found in the following repositories::
-* [Graphical User Interface](https://github.com/TwinEU-Digital-Twin-for-Europe/onenet-dsp-ui)
-* [DSP Connector API](https://github.com/TwinEU-Digital-Twin-for-Europe/onenet-dsp-api)
+* [Graphical User Interface](https://github.com/TwinEU-Digital-Twin-for-Europe/twineu-dsp-ui)
+* [DSP Connector API](https://github.com/TwinEU-Digital-Twin-for-Europe/twineu-dsp-api)
 * [DSP True Connector](https://github.com/Engineering-Research-and-Development/dsp-true-connector)

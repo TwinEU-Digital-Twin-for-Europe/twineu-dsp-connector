@@ -1,3 +1,6 @@
 .vscode/
 .env
 docker/traefik/*
+.postman/
+postman/
+docker/minio/minio.license

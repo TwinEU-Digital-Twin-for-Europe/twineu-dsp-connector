@@ -160,7 +160,7 @@ Add the following Traefik service definition to *docker-compose-single.yml*, und
 ```yaml
 services:
   traefik:
-    image: traefik:v3.4
+    image: traefik:v3.6
     container_name: traefik
     restart: unless-stopped
     networks:
@@ -289,7 +289,7 @@ Add the following Traefik service definition to *docker-compose-single.yml*, und
 
 ```yaml
   traefik:
-    image: traefik:v3.4
+    image: traefik:v3.6
     container_name: traefik
     restart: unless-stopped
     networks:
@@ -459,12 +459,28 @@ S3_EXTERNAL_PRESIGNED_ENDPOINT = **https://<public_ip_address or domain>:<public
 - Use a dedicated domain or subdomain instead (e.g., https://minio.domain.com/).
 - If you are using HTTP instead of HTTPS, you can also expose MinIO directly on the port (e.g., http://<public_ip_address>:9000).
 
+
+## MinIO Important Update (AIStor)
+
+Starting from version **2.2** of the connector, the Docker Compose configuration has been updated to use **MinIO AIStor** instead of the previous MinIO Open Source deployment.
+
+MinIO Open Source is no longer supported or actively maintained.  
+AIStor requires a valid license file, even for the Free Tier.
+
+Please refer to the [migration guide](doc/Minio-AIStore-migration-guide.md) for step-by-step instructions on how to obtain a free license and complete the transition.
+
+
 #### Push Mechanism Flow
 The Push mechanism flow is enabled by default. To disable the function use the env variable below.
 ```
 PUSH_ENABLED = **true|false**
 ```
 The Push URI can be configured in Push service creation interface.
+
+#### NATS And Kafka Plugins
+In order to enable/disable plugin functionalities in the GUI you must set these variables:
+- NATS_ENABLED --> For NATS 
+- KAFKA_ENABLED --> For Kafka
 
 The same interface can also be used to configure authentication for external service calls. The main supported methods are:
 - No Authentication

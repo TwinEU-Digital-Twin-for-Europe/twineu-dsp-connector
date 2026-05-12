@@ -2,8 +2,7 @@
   "info": {
     "_postman_id": "69d7bd47-4939-4f0f-915a-2bc360302738",
     "name": "OneNet DSP Connector APIs TwinEU",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "33807479"
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
@@ -11,18 +10,7 @@
       "item": [
         {
           "name": "page",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  ""
-                ],
-                "type": "text/javascript",
-                "packages": {}
-              }
-            }
-          ],
+          "id": "ff9ed3ec-f77d-4e5e-87e1-ee582798071d",
           "request": {
             "method": "GET",
             "header": [
@@ -50,6 +38,7 @@
         },
         {
           "name": "by-id",
+          "id": "0855dea6-5518-4734-8908-8d423cb15d55",
           "request": {
             "method": "GET",
             "header": [
@@ -88,6 +77,7 @@
               }
             }
           ],
+          "id": "e7ff80a0-ebb8-4543-b7c5-b41f6fe3d315",
           "request": {
             "method": "POST",
             "header": [
@@ -135,6 +125,7 @@
               }
             }
           ],
+          "id": "434d822f-5520-4153-aa59-70d347e11607",
           "request": {
             "method": "DELETE",
             "header": [
@@ -178,6 +169,7 @@
               }
             }
           ],
+          "id": "44b9e0f6-ec36-4047-a484-d4407519d0d1",
           "request": {
             "method": "PUT",
             "header": [
@@ -225,6 +217,7 @@
               }
             }
           ],
+          "id": "64be793c-2e2f-4396-826d-273da5c7d14a",
           "request": {
             "method": "GET",
             "header": [
@@ -249,25 +242,15 @@
           },
           "response": []
         }
-      ]
+      ],
+      "id": "3be5fd60-b901-4f80-934d-d4f73363be39"
     },
     {
       "name": "Cross Platform Service Categories",
       "item": [
         {
           "name": "page",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  ""
-                ],
-                "type": "text/javascript",
-                "packages": {}
-              }
-            }
-          ],
+          "id": "240575a9-5163-43d9-bd2f-fb3877ac87c3",
           "request": {
             "method": "GET",
             "header": [
@@ -293,7 +276,8 @@
           },
           "response": []
         }
-      ]
+      ],
+      "id": "43822c25-0cc8-4949-880e-35772fe28ee7"
     },
     {
       "name": "Cross Platform Service Services",
@@ -313,6 +297,7 @@
               }
             }
           ],
+          "id": "9b95909b-29ed-4c8a-9f33-45d824fa7e44",
           "request": {
             "method": "GET",
             "header": [
@@ -352,6 +337,7 @@
               }
             }
           ],
+          "id": "4c2d2502-78f4-4119-b4f4-dfd0ead1b82e",
           "request": {
             "method": "GET",
             "header": [
@@ -376,25 +362,15 @@
           },
           "response": []
         }
-      ]
+      ],
+      "id": "9792a89b-9fe6-46b6-8594-6e53271c5f8f"
     },
     {
       "name": "Cross Platform Service Business Objects",
       "item": [
         {
           "name": "page",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  ""
-                ],
-                "type": "text/javascript",
-                "packages": {}
-              }
-            }
-          ],
+          "id": "f4cc2ecc-02a5-47b7-842a-8d66ca6dec93",
           "request": {
             "method": "GET",
             "header": [
@@ -434,6 +410,7 @@
               }
             }
           ],
+          "id": "3215587d-618d-420f-973b-46fdf9574102",
           "request": {
             "method": "GET",
             "header": [
@@ -458,7 +435,8 @@
           },
           "response": []
         }
-      ]
+      ],
+      "id": "11251697-a38e-48a5-af00-f63150b6e568"
     },
     {
       "name": "My Offered Services",
@@ -491,6 +469,7 @@
               }
             }
           ],
+          "id": "bfb29cec-f275-4dda-9c84-79c7087a958e",
           "request": {
             "method": "GET",
             "header": [
@@ -518,6 +497,7 @@
         },
         {
           "name": "by-id",
+          "id": "13c6a81b-bead-4bdb-8345-6a31b7c90446",
           "request": {
             "method": "GET",
             "header": [
@@ -544,6 +524,7 @@
         },
         {
           "name": "save",
+          "id": "19007c8b-570e-44a6-95f3-d0e3f1daafd7",
           "request": {
             "method": "PUT",
             "header": [
@@ -578,6 +559,7 @@
         },
         {
           "name": "save Push",
+          "id": "54140bac-fcad-4fed-ae46-7cede5b8f3e7",
           "request": {
             "method": "PUT",
             "header": [
@@ -612,6 +594,7 @@
         },
         {
           "name": "update",
+          "id": "c355f122-d2bc-4218-930a-e8c5932df6ce",
           "request": {
             "method": "PUT",
             "header": [
@@ -658,6 +641,7 @@
               }
             }
           ],
+          "id": "df15bc19-4fe5-4035-aae9-03ab44e64d7e",
           "request": {
             "method": "GET",
             "header": [
@@ -683,6 +667,7 @@
         },
         {
           "name": "enable",
+          "id": "6e814456-a03d-4b9f-9853-8d1d1b3231cb",
           "request": {
             "method": "POST",
             "header": [
@@ -718,6 +703,7 @@
         },
         {
           "name": "disable",
+          "id": "4d0d57d1-0d66-400f-83de-c0a8ec980e36",
           "request": {
             "method": "POST",
             "header": [
@@ -753,6 +739,7 @@
         },
         {
           "name": "other users services",
+          "id": "e6b79f5d-6aa8-4786-98fd-f5ce930f6674",
           "request": {
             "method": "GET",
             "header": [
@@ -844,6 +831,7 @@
               }
             }
           ],
+          "id": "2cc36681-773d-46d0-aec3-3688f1951679",
           "request": {
             "method": "GET",
             "header": [
@@ -869,13 +857,15 @@
           },
           "response": []
         }
-      ]
+      ],
+      "id": "551b3ead-a347-41c7-8010-0b179cef19ed"
     },
     {
       "name": "My Subscriptions",
       "item": [
         {
           "name": "by-id",
+          "id": "5d9d138e-73a8-4cb8-ad80-16d6bf9a47cc",
           "request": {
             "method": "GET",
             "header": [
@@ -902,6 +892,7 @@
         },
         {
           "name": "save",
+          "id": "db653d4e-51ee-414e-8f0d-95bde0984a71",
           "request": {
             "method": "POST",
             "header": [
@@ -936,17 +927,7 @@
         },
         {
           "name": "page",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  ""
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
+          "id": "34f3eabe-b4da-4827-a0df-4c50ea6941bc",
           "request": {
             "method": "GET",
             "header": [
@@ -986,6 +967,7 @@
               }
             }
           ],
+          "id": "25699cec-47ff-4d83-b37b-5df97f65e14e",
           "request": {
             "method": "GET",
             "header": [
@@ -1010,13 +992,15 @@
           },
           "response": []
         }
-      ]
+      ],
+      "id": "c2a9f5d8-42d7-4851-b673-0c2c051fed8f"
     },
     {
       "name": "Requests On Offered Services",
       "item": [
         {
           "name": "by-id",
+          "id": "693b8e4f-a435-4b2b-a579-023b5a992126",
           "request": {
             "method": "GET",
             "header": [
@@ -1043,6 +1027,7 @@
         },
         {
           "name": "save",
+          "id": "16862376-ecbd-44e6-8fd6-7c581072a8fc",
           "request": {
             "method": "POST",
             "header": [
@@ -1077,17 +1062,7 @@
         },
         {
           "name": "page",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  ""
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
+          "id": "1b29ce5e-2b14-4506-9b61-94b4551e5cc7",
           "request": {
             "method": "GET",
             "header": [
@@ -1115,17 +1090,7 @@
         },
         {
           "name": "left-grouping",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  ""
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
+          "id": "f7812692-fe8e-4706-ad75-e1cca0bec6d3",
           "request": {
             "method": "GET",
             "header": [
@@ -1165,6 +1130,7 @@
               }
             }
           ],
+          "id": "462081cf-66d3-4ba6-8996-6442506f601e",
           "request": {
             "method": "GET",
             "header": [
@@ -1195,24 +1161,15 @@
           },
           "response": []
         }
-      ]
+      ],
+      "id": "f67b4548-8cb6-4c7e-95f2-a5de134e06af"
     },
     {
       "name": "Data Provided",
       "item": [
         {
           "name": "page",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  ""
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
+          "id": "edee7e63-849b-4f5f-a354-2268ecd0c2d0",
           "request": {
             "method": "GET",
             "header": [
@@ -1254,6 +1211,7 @@
               }
             }
           ],
+          "id": "4f4c13b7-684e-4ea3-a298-2ec92bbdab54",
           "request": {
             "method": "GET",
             "header": [
@@ -1294,6 +1252,7 @@
               }
             }
           ],
+          "id": "f2b6d9fa-3f4f-45d9-abaa-96918a3c055b",
           "request": {
             "method": "DELETE",
             "header": [
@@ -1325,6 +1284,7 @@
         },
         {
           "name": "provide-data",
+          "id": "2e86a331-9e11-4ee7-99e0-caac3651a954",
           "request": {
             "method": "POST",
             "header": [
@@ -1359,6 +1319,7 @@
         },
         {
           "name": "provide-data",
+          "id": "8c934f2a-fb94-44c5-aaf6-d9dff2f28e20",
           "request": {
             "method": "DELETE",
             "header": [
@@ -1383,7 +1344,8 @@
           },
           "response": []
         }
-      ]
+      ],
+      "id": "ec705730-2c3a-493b-a086-4ee46f234bed"
     },
     {
       "name": "Data Consumed",
@@ -1404,6 +1366,7 @@
               }
             }
           ],
+          "id": "27dd57a6-53f7-4308-8d02-2ff84e70d9b1",
           "request": {
             "method": "GET",
             "header": [
@@ -1431,18 +1394,7 @@
         },
         {
           "name": "left-grouping",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  ""
-                ],
-                "type": "text/javascript",
-                "packages": {}
-              }
-            }
-          ],
+          "id": "361c1830-7daf-4e96-a938-d98093abac13",
           "request": {
             "method": "GET",
             "header": [
@@ -1483,6 +1435,7 @@
               }
             }
           ],
+          "id": "7241dd5e-0f13-4fc4-8ef0-1677d420122a",
           "request": {
             "method": "GET",
             "header": [
@@ -1509,6 +1462,7 @@
         },
         {
           "name": "consume-data",
+          "id": "2a017cfc-9374-460e-9533-1c322165cfe2",
           "request": {
             "method": "GET",
             "header": [
@@ -1538,6 +1492,7 @@
         },
         {
           "name": "file metadata",
+          "id": "900c0c42-056d-44d0-b16d-36ce305ecf77",
           "request": {
             "method": "GET",
             "header": [
@@ -1565,14 +1520,47 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "consume-data-json",
+          "id": "d1bc8cc3-8ae7-4220-95d8-10d77228c030",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{local_api_scheme}}://{{local_api_host}}/api/consume-data/json/{{fileid}}",
+              "protocol": "{{local_api_scheme}}",
+              "host": [
+                "{{local_api_host}}"
+              ],
+              "path": [
+                "api",
+                "consume-data",
+                "json",
+                "{{fileid}}"
+              ]
+            }
+          },
+          "response": []
         }
-      ]
+      ],
+      "id": "9cc8a5cb-9e98-439d-a91f-230ce0216c6c"
     },
     {
       "name": "Users",
       "item": [
         {
           "name": "current",
+          "id": "7f5610b4-e361-4cf7-9d12-f35692ceeddb",
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           },
@@ -1622,6 +1610,7 @@
               }
             }
           ],
+          "id": "4ccc7170-6e87-458d-b18a-f54cd6bfdeb6",
           "request": {
             "method": "POST",
             "header": [],
@@ -1652,6 +1641,7 @@
         },
         {
           "name": "left-grouping",
+          "id": "ae6477f7-603e-4b51-bc7e-8356b897d011",
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           },
@@ -1690,6 +1680,7 @@
         },
         {
           "name": "page",
+          "id": "6013d576-6d21-435f-9208-5e416b24b994",
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           },
@@ -1729,18 +1720,7 @@
         },
         {
           "name": "logout",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  ""
-                ],
-                "type": "text/javascript",
-                "packages": {}
-              }
-            }
-          ],
+          "id": "f8e49733-b1d2-4fc8-832c-c18c5cdbd716",
           "request": {
             "method": "POST",
             "header": [
@@ -1775,6 +1755,7 @@
         },
         {
           "name": "by-id",
+          "id": "2b33e126-f271-464b-87ef-7a997441e5cc",
           "request": {
             "method": "GET",
             "header": [
@@ -1799,6 +1780,7 @@
           },
           "response": [
             {
+              "id": "9bc335fc-b66a-40f5-a3aa-fdec37af1f8c",
               "name": "by-id",
               "originalRequest": {
                 "method": "GET",
@@ -1911,6 +1893,7 @@
               }
             }
           ],
+          "id": "e9c76889-e6e4-4619-9e1e-dada539fe0ea",
           "request": {
             "method": "DELETE",
             "header": [
@@ -1942,6 +1925,7 @@
         },
         {
           "name": "save",
+          "id": "ccf507dd-f702-417d-86d8-a7b2ec21dad4",
           "request": {
             "method": "POST",
             "header": [
@@ -1980,13 +1964,15 @@
           },
           "response": []
         }
-      ]
+      ],
+      "id": "da19c3e9-d284-4272-9e8c-562658622191"
     },
     {
       "name": "Connector Settings",
       "item": [
         {
           "name": "by-id",
+          "id": "20405510-e9bc-46c4-9ff1-db2da8ae7e9a",
           "request": {
             "method": "GET",
             "header": [
@@ -2019,6 +2005,7 @@
         },
         {
           "name": "save",
+          "id": "ba82b68f-e0bf-4ee7-b99d-032745a1bddd",
           "request": {
             "method": "POST",
             "header": [
@@ -2064,13 +2051,15 @@
           },
           "response": []
         }
-      ]
+      ],
+      "id": "734b8f21-4cc4-48fc-a363-47310f47af49"
     },
     {
       "name": "Timeline",
       "item": [
         {
           "name": "list",
+          "id": "6790d4e6-cc60-41b3-8be3-2e6c24678107",
           "request": {
             "method": "GET",
             "header": [
@@ -2117,25 +2106,15 @@
           },
           "response": []
         }
-      ]
+      ],
+      "id": "6963b3b5-ca88-4294-97bf-5e66ebec23b7"
     },
     {
       "name": "Company",
       "item": [
         {
           "name": "page",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  ""
-                ],
-                "type": "text/javascript",
-                "packages": {}
-              }
-            }
-          ],
+          "id": "8f279285-a4ca-4691-b36e-1f08b07d8b26",
           "request": {
             "method": "GET",
             "header": [
@@ -2161,13 +2140,15 @@
           },
           "response": []
         }
-      ]
+      ],
+      "id": "f98ecb87-c85b-43dc-8742-4cfb8850fac8"
     },
     {
       "name": "Other",
       "item": [
         {
           "name": "check-connectivity",
+          "id": "5a1069be-9d82-4727-9e39-4ccd20ad1755",
           "request": {
             "method": "GET",
             "header": [
@@ -2191,77 +2172,68 @@
           },
           "response": []
         }
-      ]
-    }
-  ],
-  "event": [
-    {
-      "listen": "prerequest",
-      "script": {
-        "type": "text/javascript",
-        "requests": {},
-        "exec": [
-          ""
-        ]
-      }
-    },
-    {
-      "listen": "test",
-      "script": {
-        "type": "text/javascript",
-        "requests": {},
-        "exec": [
-          ""
-        ]
-      }
+      ],
+      "id": "9a359579-8b0b-4c23-888f-cab261cf3b49"
     }
   ],
   "variable": [
     {
+      "id": "3ed387ca-bd8d-4b50-b9bd-bc85d66a8b45",
       "key": "username",
       "value": ""
     },
     {
+      "id": "880f22e8-9112-4215-b115-8f6f84a96359",
       "key": "password",
       "value": ""
     },
     {
+      "id": "dfe60a99-5e59-4185-a0a1-dd76fc863fd6",
       "key": "scheme",
       "value": "http"
     },
     {
+      "id": "cfc9c87f-ebc2-46c8-bc53-9c423e1f7edc",
       "key": "host",
       "value": "4.232.76.64/middleware-dev"
     },
     {
+      "id": "d6f1f106-d9b1-43f6-9167-de170539835f",
       "key": "token",
       "value": ""
     },
     {
+      "id": "5ae5de97-b0f8-4045-92ad-8b9f8e4eac6f",
       "key": "local_api_scheme",
       "value": "http"
     },
     {
+      "id": "b4920c84-c071-45c6-b296-636222f6429e",
       "key": "local_api_host",
       "value": "localhost:30001"
     },
     {
+      "id": "38beffc9-7cd0-476d-a55a-607d9efce481",
       "key": "entity_id",
       "value": ""
     },
     {
+      "id": "13834d30-b7f5-4cf9-bf06-8372e6f2efbc",
       "key": "fileid",
       "value": ""
     },
     {
+      "id": "2e67ed6a-85a0-4d96-a71b-7dc5d83fcfc2",
       "key": "provider_ecc",
       "value": ""
     },
     {
+      "id": "41ae9f47-0c15-4659-94fa-46832e296ba7",
       "key": "consumer_fiware",
       "value": ""
     },
     {
+      "id": "2ec49e7e-7517-4c73-8e35-20f53c1ec1e2",
       "key": "consumer_data_app",
       "value": ""
     }

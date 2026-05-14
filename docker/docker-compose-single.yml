@@ -1,4 +1,4 @@
-name: energy-dsp-connector-v2-2-0
+name: energy-dsp-connector-v2-2-1
 services:
   ### minio (simulated S3 cloud storage)
   minio:
@@ -36,6 +36,7 @@ services:
       - CENTRALIZED_SERVICES_API_URL=${CENTRALIZED_SERVICES_API_URL}
       - NOTIFICATIONS_ENABLED=${NOTIFICATIONS_ENABLED}
       - NOTIFICATION_MODULE_ENDPOINT=http://4.232.76.64/notification-module/api/v1
+  
   connector-a:
     restart: unless-stopped
     image: mlafranca/dsp-true-connector:0.5.0-3
@@ -71,6 +72,7 @@ services:
       - S3_EXTERNAL_PRESIGNED_ENDPOINT=${S3_EXTERNAL_PRESIGNED_ENDPOINT}
       - S3_ACCESS_KEY=${MINIO_USER}
       - S3_SECRET_KEY=${MINIO_PASSWORD}
+      - APPLICATION_ENCRYPTION_KEY=${CONNECTOR_A_APPLICATION_ENCRYPTION_KEY}
     volumes:
       - ./connector_a_resources:/config
       - ./tc_cert:/cert

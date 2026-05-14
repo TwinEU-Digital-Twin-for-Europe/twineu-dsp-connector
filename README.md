@@ -429,6 +429,26 @@ You can use *user1* as the provider and *user2* as the consumer or viceversa.
 
 Inside the */docker* project folder, there are some *.env.example* environment configuration files. These files allow you to set all Back End configurations of the TwinEU DSP Connector. Rename them to *.env* and modify them according to your setup.
 
+#### Important note
+
+The application requires specific environment variables to be set before starting the connector.
+
+In the example configuration files, sensitive values have been replaced with placeholders for security reasons:
+
+CONNECTOR_BASIC_AUTHENTICATION=your_base64_credentials_here
+
+CONNECTOR_A_APPLICATION_ENCRYPTION_KEY=your_encryption_key_here
+CONNECTOR_B_APPLICATION_ENCRYPTION_KEY=your_encryption_key_here
+
+These values must be configured before running the application.
+
+##### Usage
+
+- Replace the placeholder values with valid credentials and keys for your environment
+  or
+- Request a pre-configured .env file from the project maintainers
+
+
 #### Connector ENDPOINT API URL
 In a real (production) environment, each connector must be exposed with a public IP address or DNS name so that all consumers can access the data provider.
 

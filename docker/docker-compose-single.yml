@@ -1,4 +1,4 @@
-name: energy-dsp-connector-v2-2-1
+name: energy-dsp-connector-v2-2-2
 services:
   ### minio (simulated S3 cloud storage)
   minio:
@@ -20,7 +20,7 @@ services:
   ### instance a
   onenet-dsp-api-a:
     restart: unless-stopped
-    image: mlafranca/onenet-dsp-api:1.1.9
+    image: mlafranca/onenet-dsp-api:1.1.9-1
     container_name: onenet-dsp-api-a
     ports:
       - "30001:30001"
@@ -82,7 +82,7 @@ services:
   mongodb-a:
     restart: unless-stopped
     container_name: mongodb-a
-    image: mongo:7.0.32
+    image: mongo:7.0.34
     networks:
       - network-a
     ports:

@@ -1,4 +1,4 @@
-name: energy-dsp-connector-v2-2-1
+name: energy-dsp-connector-v2-2-2
 services:
   traefik:
     image: traefik:v3.6
@@ -83,7 +83,7 @@ services:
       - "traefik.http.services.minio.loadbalancer.server.port=9000"
 
   onenet-dsp-api-a:
-    image: mlafranca/onenet-dsp-api:1.1.9
+    image: mlafranca/onenet-dsp-api:1.1.9-1
     container_name: onenet-dsp-api-a
     restart: unless-stopped
     depends_on:
@@ -159,7 +159,7 @@ services:
       - "traefik.http.services.connector-a.loadbalancer.server.port=8080"
 
   mongodb-a:
-    image: mongo:7.0.32
+    image: mongo:7.0.34
     container_name: mongodb-a
     restart: unless-stopped
     networks:

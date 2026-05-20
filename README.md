@@ -435,10 +435,12 @@ The application requires specific environment variables to be set before startin
 
 In the example configuration files, sensitive values have been replaced with placeholders for security reasons:
 
-CONNECTOR_BASIC_AUTHENTICATION=your_base64_credentials_here
+```
+CONNECTOR_BASIC_AUTHENTICATION=<your_base64_credentials_here>
 
-CONNECTOR_A_APPLICATION_ENCRYPTION_KEY=your_encryption_key_here
-CONNECTOR_B_APPLICATION_ENCRYPTION_KEY=your_encryption_key_here
+CONNECTOR_A_APPLICATION_ENCRYPTION_KEY=<your_encryption_key_here>
+CONNECTOR_B_APPLICATION_ENCRYPTION_KEY=<your_encryption_key_here>
+```
 
 These values must be configured before running the application.
 

@@ -1,4 +1,4 @@
-name: energy-dsp-connector-v2-2-2
+name: energy-dsp-connector-v2-2-3
 services:
   ### AIStor minio (simulated S3 cloud storage)
   minio:
@@ -84,7 +84,7 @@ services:
   mongodb-a:
     restart: unless-stopped
     container_name: mongodb-a
-    image: mongo:7.0.34
+    image: mongo:7.0.35
     networks:
       - network-a
     ports:
@@ -158,7 +158,7 @@ services:
   mongodb-b:
     restart: unless-stopped
     container_name: mongodb-b
-    image: mongo:7.0.34
+    image: mongo:7.0.35
     networks:
       - network-b
     ports:

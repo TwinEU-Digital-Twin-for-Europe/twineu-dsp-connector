@@ -1,4 +1,4 @@
-name: energy-dsp-connector-v2-2-2
+name: energy-dsp-connector-v2-2-3
 services:
   traefik:
     image: traefik:v3.6
@@ -159,7 +159,7 @@ services:
       - "traefik.http.services.connector-a.loadbalancer.server.port=8080"
 
   mongodb-a:
-    image: mongo:7.0.34
+    image: mongo:7.0.35
     container_name: mongodb-a
     restart: unless-stopped
     networks:
